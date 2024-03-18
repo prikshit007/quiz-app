@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import Questions from "./constants/dummy.json";
+import Question from "./components/Question";
+import Result from "./components/Result";
 
 function App() {
+  const [current, setCurrent] = useState(0);
+  const [userAnswers, setUserAnswers] = useState([]);
+  const handleNextQuestion = (option) => {
+    setCurrent(current + 1);
+    setUserAnswers([...userAnswers, option]);
+  };
+  const retryQuiz = () => {
+    setCurrent(0);
+    setUserAnswers([]);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h2>Prikshit Quiz</h2>
+      {current < Questions.length && (
+        <Question
+          question={Questions[current]}
+          onAnswerClick={handleNextQuestion}
+        />
+      )}
+      {current === Questions.length && (
+        <Result
+          questions={Questions}
+          userAnswers={userAnswers}
+          retryQuiz={retryQuiz}
+        />
+      )}
     </div>
   );
 }
